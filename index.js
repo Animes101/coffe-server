@@ -112,9 +112,30 @@ async function run() {
 
         const id = req.params.id;
 
-        console.log(id)
+        const updateData=req.body
+
+        console.log(updateData);
+
+        const filter = { _id: new ObjectId(id)};
+        const updateDocument = {
+                  $set: {
+                      coffeeName:updateData.coffeName,
+                      prices:updateData.price,
+                  },
 
 
+                }
+
+                const result = await coffes.updateOne(filter, updateDocument)
+
+                if(result.modifiedCount>0){
+
+                  res.status(200).json({
+                    message:'success fully update',
+                    data:result,
+
+                  })
+                }
 
       })
     // Send a ping to confirm a successful connection
