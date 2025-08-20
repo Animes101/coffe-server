@@ -52,10 +52,7 @@ async function run() {
           data:result
 
         })
-      }else
-
-
-        {
+      }else{
 
           res.send('coffe not found');
         }
@@ -103,7 +100,6 @@ async function run() {
         }
 
 
-
       })
 
 
@@ -113,8 +109,6 @@ async function run() {
         const id = req.params.id;
 
         const updateData=req.body
-
-        console.log(updateData);
 
         const filter = { _id: new ObjectId(id)};
         const updateDocument = {
@@ -138,6 +132,88 @@ async function run() {
                 }
 
       })
+
+
+      //user crud operation
+
+        const userMDB = client.db("userDB");
+        const usercollection =userMDB.collection("usercollection");
+      app.post('/users',async (req,res)=>{
+
+
+        const userData=req.body;
+
+        if(userData){
+
+        const result= await usercollection.insertOne(userData);
+
+        res.status(200).json({
+          message:'success fully add coffe',
+          data:result
+
+        })
+
+      }else{
+
+          res.send('user  not found');
+        }
+      })
+
+
+
+
+      app.get('/users', async (req,res)=>{
+
+        const result= await usercollection.find().toArray();
+
+        if(result){
+
+          res.status(200).json({
+
+          message:'all data ',
+          data:result
+          
+        })
+        }
+
+
+
+      })
+
+      
+
+        app.delete('/users/:id', async (req,res)=>{
+
+        const id = req.params.id;
+
+        const query = { _id: new ObjectId(id) };
+        const result = await usercollection.deleteOne(query);
+
+        console.log(result)
+
+        if(result.deletedCount>0){
+
+          res.status(200).json({
+            message:'delete success fully',
+            success:true,
+          })
+        }
+
+
+      })
+
+      app.get('/users/:id', (req,res)=>{
+
+        const {id}=req.params
+
+        console.log(id);
+
+        res.json({ message: "ok" })
+
+
+
+      })
+    
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
