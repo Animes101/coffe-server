@@ -88,7 +88,6 @@ async function run() {
         const query = { _id: new ObjectId(id) };
         const result = await coffes.deleteOne(query);
 
-        console.log(result)
 
         if(result.deletedCount>0){
 
@@ -211,6 +210,36 @@ async function run() {
         res.json({ message: "ok" })
 
 
+
+      })
+
+
+
+
+      app.put('/userUpdate/:id', async (req,res)=>{
+
+        const id = req.params.id;
+
+        const userInfo=req.body
+
+        const filter = { _id: new ObjectId(id)};
+        const updateDocument = {
+                  $set: {
+                      email:userInfo.email,
+                      
+                  },
+                }
+
+                const result = await usercollection.updateOne(filter, updateDocument)
+
+                if(result.modifiedCount>0){
+
+                  res.status(200).json({
+                    message:'success fully update',
+                    data:result,
+
+                  })
+                }
 
       })
     
